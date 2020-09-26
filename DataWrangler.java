@@ -45,9 +45,10 @@ public class DataWrangler {
       }
       
       //looks to see if the correct variables are there and in the correct order
-      if(!variables[0].toLowerCase().equals("title") || !variables[1].toLowerCase().equals("author") ||
+      if(variables[0].subSequence(0, variables[0].length()).equals("Title") || !variables[1].toLowerCase().equals("author") ||
           !variables[2].toLowerCase().equals("publisher") || !variables[3].toLowerCase().equals("publication year") ||
-          !variables[0].toLowerCase().equals("isbn")) {
+          !variables[4].toLowerCase().equals("isbn")) {
+        System.out.println(variables[0] + "," + variables[1] + "," + variables[2] + "," + variables[3] + "," + variables[4]);
         System.out.println("The variables are not correct. The first line of the File should be \"Title,Author,Publisher,Publication Year,ISBN\"");
         scan.close();
         return false;
@@ -56,6 +57,24 @@ public class DataWrangler {
       //creates the book object one line at a time
       while(scan.hasNextLine()) {
         info = scan.nextLine().split(","); //scans in info
+        
+        if(info.length > 5) {
+          String[] temp = new String[infoTypes];
+          temp[0] = "";
+          temp[4] = info[info.length - 1];
+          temp[3] = info[info.length - 2];
+          temp[2] = info[info.length - 3];
+          temp[1] = info[info.length - 4];
+          
+          for(int i = 0; i < info.length - 4; i++) {
+            temp[0] += info[i];
+            if(i + 1 < info.length - 4) {
+              temp[0] += ",";
+            }
+          }
+          
+          info = temp;
+        }
         
         //creates book
         Book newBook = new Book(info[0], info[1], info[2], Integer.parseInt(info[3]), info[4]);
